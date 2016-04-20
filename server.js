@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var bootstrap = require('bootstrap');
 var bodyParser = require('body-parser');
 var path =  require('path');
 app.use(bodyParser.json());
