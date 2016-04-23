@@ -1,0 +1,10 @@
+<div class='container text-center' ng-controller="userCtrl">
+	<h2 id="hello">Hello! Please enter your name to join and share your ideas!</h2>
+	<form class="form-inline" role="form">
+	  <div class="form-group">
+	    <label for="name">Name:</label>
+	    <input type="text" class="form-control" id="name" ng-model='newUser.name' placeholder="Please enter your name...">
+	  </div>
+	  <button type="submit" ng-click="addUser()" class="btn btn-default btn-sm">Enter</button>
+	</form>
+</div>

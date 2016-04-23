@@ -20,6 +20,9 @@
 		var UDApp = angular.module('UDApp', ['ngRoute']);
 		UDApp.config(function($routeProvider){
 			$routeProvider
+				.when('/', {
+					templateUrl: 'partials/login.html'
+				})
 				.when('/dashboard', {
 					templateUrl: 'partials/dashboard.html'
 				})
@@ -35,20 +38,64 @@
 		});
 
 		//USER CONTROLLER
+		UDApp.controller('userCtrl', function($scope, $location, userFac, $routeParams){
+			$scope.users = [];
+
+			userFac.index(function(info){
+				// console.log('hit index in user controller');
+				$scope.users = info;
+			});
+
+			$scope.addUser = function(data){
+				userFac.create($scope.newUser, function(data){
+					// console.log('hit addUser in user controller');
+					$scope.users = data;
+				});
+				$scope.newUser = {};
+				$location.path('/dashboard');
+			}
+		});
+
+		//DASHBOARD CONTROLLER
+		UDApp.controller('dashCtrl', function($scope, $location, $routeParams, userFac){
+			$scope.users = [];
+			// var id = $routeParams.id;
+
+			userFac.index(function(data){
+				$scope.users = data;
+				$scope.current_user = data[0].name;
+			});
+		});
+
+		//USER FACTORY
+		UDApp.factory('userFac', function($http){
+			var factory = {};
+			var users = [];
+
+			factory.index = function(callback){
+				$http.get('/users').success(function(output){
+					// console.log('hit user factory index');
+					users = output;
+					callback(users);
+				});
+			}
+
+			factory.create = function(info, callback){
+				$http.post('/users', info).success(function(output){
+					// console.log('hit user factory create');
+					users.push(output);
+					callback();
+				});
+			}
+			return factory;
+		});
+
 
 	</script>
 
 </head>
 <body>
-	<div class='container text-center'>
-		<h2 id="hello">Hello! Please enter your name to join and share your ideas!</h2>
-		<form class="form-inline" role="form">
-		  <div class="form-group">
-		    <label for="name">Name:</label>
-		    <input type="text" class="form-control" id="name" ng-model='newUser.name' placeholder="Please enter your name...">
-		  </div>
-		  <button type="submit" class="btn btn-default btn-sm">Enter</button>
-		</form>
+	<div class='container'>
 		<div ng-view="">
 		</div>
 	</div>
