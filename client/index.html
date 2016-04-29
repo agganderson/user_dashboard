@@ -40,11 +40,7 @@
 		//USER CONTROLLER
 		UDApp.controller('userCtrl', function($scope, $location, userFac, $routeParams){
 			$scope.users = [];
-
-			userFac.index(function(info){
-				// console.log('hit index in user controller');
-				$scope.users = info;
-			});
+			$scope.current_user = [];
 
 			$scope.addUser = function(data){
 				userFac.create($scope.newUser, function(data){
@@ -52,6 +48,10 @@
 					$scope.users = data;
 				});
 				$scope.newUser = {};
+
+				userFac.login($scope.newUser, function(data){
+					$scope.current_users = data;
+				});
 				$location.path('/dashboard');
 			}
 		});
@@ -60,11 +60,17 @@
 		UDApp.controller('dashCtrl', function($scope, $location, $routeParams, userFac, topicFac){
 			$scope.users = [];
 			$scope.topics = [];
+			$scope.current_user = [];
 			// var id = $routeParams.id;
 
-			userFac.index(function(data){
-				$scope.users = data;
-				$scope.current_user = data[0].name;
+			userFac.get_user(function(info){
+				$scope.current_user = info[0].name;
+				// console.log($scope.current_user);
+				// console.log(info[0].name);
+			});
+
+			userFac.index(function(info){
+				$scope.users = info;
 			});
 
 			topicFac.index(function(data){
@@ -78,10 +84,9 @@
 				});	
 			}
 
-			$scope.logout = function(data){
-				userFac.logout(function(data){
-					$location.path('/');
-				});
+			$scope.logout = function(){
+				$scope.current_user = "";
+				$location.path('/');
 			}
 
 		});
@@ -90,6 +95,7 @@
 		UDApp.factory('userFac', function($http){
 			var factory = {};
 			var users = [];
+			var current_users = [];
 
 			factory.index = function(callback){
 				$http.get('/users').success(function(output){
@@ -107,6 +113,16 @@
 					callback(users);
 				});
 			}
+
+			factory.login = function(info, callback){
+				current_users.push(info);
+				callback(current_users);
+			}
+
+			factory.get_user = function(callback){
+				callback(current_users);
+			}
+
 			return factory;
 		});
 

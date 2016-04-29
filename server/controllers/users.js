@@ -14,6 +14,7 @@ module.exports = (function(){
 			});
 		},
 		create: function(req, res){
+			
 			var newUser = new User({name: req.body.name});
 			newUser.save(function(err, results){
 				if(err){
