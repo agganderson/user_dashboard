@@ -1,3 +1,61 @@
 <div ng-controller="dashCtrl">
+	 <a href="#" ng-click="logout()">Logout</a>
 	<h1>Welcome {{current_user}}!</h1>
+	<input type="text" ng-model="filter_name"> <button class="btn btn-default btn-xs">Search</button>
+	<table class="table table-striped">
+	    <thead>
+	      <tr>
+	        <th>Category</th>
+	        <th>Topic</th>
+	        <th>Username</th>
+	        <th>Posts</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <tr ng-repeat="topic in topics | filter:filter_name | orderBy: '-created_at' ">
+	        <td ng-bind="topic.category"></td>
+	        <td ng-bind="topic.title"></td>
+	        <td ng-bind="topic.name"></td>
+	        <td>number of answers here</td>
+	      </tr>
+	    </tbody>
+	</table>
+
+	<h2>Add a New Topic!</h2>
+	<form class="form-horizontal" role="form">
+	  <div class="form-group">
+	  	<input type="hidden" ng-value="newTopic.name=current_user">
+	    <label class="control-label col-sm-2" for="topic">Topic:</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="topic" placeholder="Enter Topic Title" ng-model="newTopic.title">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="description">Description:</label>
+	    <div class="col-sm-10"> 
+	      <input type="text" class="form-control" id="description" placeholder="Enter Description" ng-model="newTopic.description">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="category">Category:</label>
+	    <div class="col-sm-10"> 
+	      <select ng-model="newTopic.category">
+	      	<option>HTML</option>
+	      	<option>CSS</option>
+	      	<option>JavaScript</option>
+	      	<option>RoR</option>
+	      	<option>Python</option>
+	      	<option>PHP</option>
+	      	<option>UI/UX</option>
+	      	<option>Web Development</option>
+	      	<option>MySQL</option>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="form-group"> 
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button ng-click="addTopic()" class="btn btn-default btn-sm">Submit</button>
+	    </div>
+	  </div>
+	</form>
 </div>

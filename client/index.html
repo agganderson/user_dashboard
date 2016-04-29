@@ -57,14 +57,33 @@
 		});
 
 		//DASHBOARD CONTROLLER
-		UDApp.controller('dashCtrl', function($scope, $location, $routeParams, userFac){
+		UDApp.controller('dashCtrl', function($scope, $location, $routeParams, userFac, topicFac){
 			$scope.users = [];
+			$scope.topics = [];
 			// var id = $routeParams.id;
 
 			userFac.index(function(data){
 				$scope.users = data;
 				$scope.current_user = data[0].name;
 			});
+
+			topicFac.index(function(data){
+				$scope.topics = data;
+			});
+
+			$scope.addTopic = function(data){
+				topicFac.create($scope.newTopic, function(data){
+					$scope.topics = data;
+					$scope.newTopic = {};
+				});	
+			}
+
+			$scope.logout = function(data){
+				userFac.logout(function(data){
+					$location.path('/');
+				});
+			}
+
 		});
 
 		//USER FACTORY
@@ -83,7 +102,32 @@
 			factory.create = function(info, callback){
 				$http.post('/users', info).success(function(output){
 					// console.log('hit user factory create');
-					users.push(output);
+					users.push(info.name);
+					// factory.index(callback);
+					callback(users);
+				});
+			}
+			return factory;
+		});
+
+		//TOPIC FACTORY
+		UDApp.factory('topicFac', function($http){
+			var factory = {};
+			var topics = [];
+
+			factory.index = function(callback){
+				$http.get('/topics').success(function(output){
+					// console.log('hit topic factory index');
+					topics = output;
+					callback(topics);
+				});
+			}
+
+			factory.create = function(info, callback){
+				$http.post('/topics', info).success(function(output){
+					// console.log('hit topic factory create');
+					topics.push(output);
+					factory.index(callback);
 					callback();
 				});
 			}
@@ -95,7 +139,7 @@
 
 </head>
 <body>
-	<div class='container'>
+	<div class='container text-left'>
 		<div ng-view="">
 		</div>
 	</div>
