@@ -133,7 +133,7 @@
 
 			factory.index = function(callback){
 				$http.get('/topics').success(function(output){
-					// console.log('hit topic factory index');
+					console.log('hit topic factory index');
 					topics = output;
 					callback(topics);
 				});
@@ -141,7 +141,7 @@
 
 			factory.create = function(info, callback){
 				$http.post('/topics', info).success(function(output){
-					// console.log('hit topic factory create');
+					console.log('hit topic factory create');
 					topics.push(output);
 					factory.index(callback);
 					callback();
