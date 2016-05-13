@@ -1,7 +1,7 @@
 var users = require('./../controllers/users.js');
 var topics = require('./../controllers/topics.js');
 // var comments = require('./../controllers/comments.js');
-// var answers = require('./../controllers/answers.js');
+var answers = require('./../controllers/answers.js');
 
 
 
@@ -17,12 +17,17 @@ module.exports = function(app){
 	});
 
 	app.get('/topics', function(req, res){
-		console.log('hit topics get route');
+		// console.log('hit topics get route');
 		topics.index(req, res);
 	});
 
 	app.post('/topics', function(req, res){
-		console.log('hit topics post route');
+		// console.log('hit topics post route');
 		topics.create(req, res);
+	});
+
+	app.get('/topic/:id', function(req, res){
+		// console.log('hit topic by id route');
+		topics.getTopic(req, res, req.params.id)
 	});
 }

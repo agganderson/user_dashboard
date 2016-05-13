@@ -24,6 +24,17 @@ module.exports = (function(){
 					res.json(results);
 				}
 			});
+		},
+		getTopic: function(req, res){
+			Topic.findOe({_id:req.params.id}, function(err, results){
+				if(err){
+					console.log('Could not get that topic, please try again', results);
+				}
+				else {
+					console.log('Got your topic!');
+					res.json(results);
+				}
+			});
 		}
 	}
 })();

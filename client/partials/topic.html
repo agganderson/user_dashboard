@@ -1,0 +1,18 @@
+<div ng-controller="topicController">
+	<p class='text-right'><a href="#/dashboard">Dashboard</a></p>
+	<p class='text-right'><a href="#" ng-click="logout()">Logout</a></p>
+	<h2>{{topic.name}} posted a topic:</h2>
+	<h4 id="topic_title" ng-bind="topic.title"></h4>
+	<p id="topic_description" ng-bind="topic.description"></p>
+	<h3>{{current_user}}, post your answer here!</h3>
+	<form role="form" name="createform">
+		<input type="hidden" ng-value="newAnswer.name=current_user">
+		<div class="form-group">
+			<input type="textarea" class="form-control" id="answer" name="answer" ng-model="newAnswer.answer">
+		</div>
+		<button class="btn btn-default btn-sm btn-right" ng-click="addAnswer()">Post</button>
+	</form>
+	<hr>
+	<hr>
+
+</div>

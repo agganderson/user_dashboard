@@ -29,7 +29,7 @@
 				.when('/user', {
 					templateUrl: 'partials/user.html'
 				})
-				.when('/topic', {
+				.when('/topic/:id', {
 					templateUrl: 'partials/topic.html'
 				})
 				.otherwise({
@@ -38,47 +38,59 @@
 		});
 
 		//USER CONTROLLER
-		UDApp.controller('userCtrl', function($scope, $location, userFac, $routeParams){
-			$scope.users = [];
-			$scope.current_user = [];
+		UDApp.controller('userController', function($scope, $location, $routeParams, userFactory){
+			// $scope.users = [];
 
-			$scope.addUser = function(data){
-				userFac.create($scope.newUser, function(data){
-					// console.log('hit addUser in user controller');
-					$scope.users = data;
-				});
-				$scope.newUser = {};
+			$scope.current_users = [];
 
-				userFac.login($scope.newUser, function(data){
+				// i dont think i need this addUser code
+			// $scope.addUser = function(data){
+			// 	userFac.create($scope.newUser, function(data){
+			// 		// console.log('hit addUser in user controller');
+			// 		$scope.users = data;
+			// 	});
+			// 	$scope.newUser = {};
+
+			// 	userFac.login($scope.newUser, function(data){
+			// 		$scope.current_users = data;
+			// 	});
+			// 	$location.path('/dashboard');
+			// }
+
+			$scope.loginUser = function(data){
+				userFactory.login($scope.newUser, function(data){
 					$scope.current_users = data;
 				});
+
+				$scope.Newuser = {};
 				$location.path('/dashboard');
 			}
+
 		});
 
 		//DASHBOARD CONTROLLER
-		UDApp.controller('dashCtrl', function($scope, $location, $routeParams, userFac, topicFac){
+		UDApp.controller('dashController', function($scope, $location, $routeParams, userFactory, topicFactory){
 			$scope.users = [];
 			$scope.topics = [];
 			$scope.current_user = [];
 			// var id = $routeParams.id;
 
-			userFac.get_user(function(info){
+			userFactory.get_user(function(info){
 				$scope.current_user = info[0].name;
 				// console.log($scope.current_user);
 				// console.log(info[0].name);
 			});
 
-			userFac.index(function(info){
+			userFactory.index(function(info){
 				$scope.users = info;
 			});
 
-			topicFac.index(function(data){
+			topicFactory.index(function(data){
 				$scope.topics = data;
 			});
 
 			$scope.addTopic = function(data){
-				topicFac.create($scope.newTopic, function(data){
+				topicFactory.create($scope.newTopic, function(data){
 					$scope.topics = data;
 					$scope.newTopic = {};
 				});	
@@ -91,8 +103,30 @@
 
 		});
 
+		//TOPIC CONTROLLER
+		UDApp.controller('topicController', function($scope, $location, $routeParams, userFactory, topicFactory){
+			$scope.users = [];
+			$scope.topic = [];
+			$scope.current_user = [];
+
+			userFactory.get_user(function(info){
+				$scope.current_user = info[0].name;
+			});
+
+			$scope.getTopic = function(id){
+				var location = '/topic/' + id;
+				$location.path(location);
+			}
+
+			TopicID = $routeParams.id
+			topicFactory.get_topic(TopicID, function(data){
+				$scope.topic = data;
+			});
+
+		});
+
 		//USER FACTORY
-		UDApp.factory('userFac', function($http){
+		UDApp.factory('userFactory', function($http){
 			var factory = {};
 			var users = [];
 			var current_users = [];
@@ -127,7 +161,7 @@
 		});
 
 		//TOPIC FACTORY
-		UDApp.factory('topicFac', function($http){
+		UDApp.factory('topicFactory', function($http){
 			var factory = {};
 			var topics = [];
 
@@ -147,6 +181,13 @@
 					callback();
 				});
 			}
+
+			factory.get_topic = function(id, callback){
+				$http.get('/topic/' + id).success(function(output){
+					callback(output);
+				});
+			}
+
 			return factory;
 		});
 
