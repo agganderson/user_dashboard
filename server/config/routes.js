@@ -30,4 +30,14 @@ module.exports = function(app){
 		// console.log('hit topic by id route');
 		topics.getTopic(req, res, req.params.id)
 	});
+
+	app.get('/answers', function(req, res){
+		console.log('hit answer index route');
+		answers.index(req, res);
+	});
+
+	app.post('/answers', function(req, res){
+		console.log('hit answer create route');
+		answers.create(req, res, req.params.id);
+	});
 }

@@ -8,7 +8,7 @@ module.exports = (function(){
 					console.log('ERROR ERROR', results);
 				}
 				else {
-					console.log('Got dem users');
+					// console.log('Got dem users');
 					res.json(results);
 				}
 			});
@@ -21,7 +21,7 @@ module.exports = (function(){
 					console.log('GET THE DEFIBRILLATOR', results);
 				}
 				else {
-					console.log('SAVED THEM');
+					// console.log('SAVED THEM');
 					res.json(results);
 				}
 			});

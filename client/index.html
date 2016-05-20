@@ -104,9 +104,10 @@
 		});
 
 		//TOPIC CONTROLLER
-		UDApp.controller('topicController', function($scope, $location, $routeParams, userFactory, topicFactory){
+		UDApp.controller('topicController', function($scope, $location, $routeParams, userFactory, topicFactory, answerFactory){
 			$scope.users = [];
 			$scope.topic = [];
+			$scope.answers = [];
 			$scope.current_user = [];
 
 			userFactory.get_user(function(info){
@@ -122,6 +123,13 @@
 			topicFactory.get_topic(TopicID, function(data){
 				$scope.topic = data;
 			});
+
+			$scope.addAnswer = function(data){
+				answerFactory.create($scope.newAnswer, function(data){
+					$scope.answers = data;
+					$scope.newAnswer = {};
+				});
+			}
 
 		});
 
@@ -185,6 +193,30 @@
 			factory.get_topic = function(id, callback){
 				$http.get('/topic/' + id).success(function(output){
 					callback(output);
+				});
+			}
+
+			return factory;
+		});
+
+		UDApp.factory('answerFactory', function($http){
+			var factory = {};
+			var answers = [];
+
+			factory.index = function(callback){
+				$http.get('/answers').success(function(output){
+					console.log('hit answer factory index');
+					answers = output;
+					callback(answers);
+				});
+			}
+
+			factory.create = function(info, callback){
+				$http.post('/answers', info).success(function(output){
+					console.log('hit answer factory create');
+					answers.push(output);
+					factory.index(callback);
+					callback();
 				});
 			}
 

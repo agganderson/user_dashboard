@@ -26,7 +26,7 @@ module.exports = (function(){
 			});
 		},
 		getTopic: function(req, res){
-			Topic.findOe({_id:req.params.id}, function(err, results){
+			Topic.findOne({_id:req.params.id}, function(err, results){
 				if(err){
 					console.log('Could not get that topic, please try again', results);
 				}
