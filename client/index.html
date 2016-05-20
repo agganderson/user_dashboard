@@ -126,8 +126,10 @@
 
 			$scope.addAnswer = function(data){
 				answerFactory.create($scope.newAnswer, function(data){
-					$scope.answers = data;
-					$scope.newAnswer = {};
+					topicFactory.get_topic($routeParams.id, function(data){
+						$scope.answers = data;
+						$scope.newAnswer = {};
+					});
 				});
 			}
 

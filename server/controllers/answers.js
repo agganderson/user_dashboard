@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var Topic = mongoose.model('Topic');
 var Answer = mongoose.model('Answer');
 module.exports = (function(){
 	return {
@@ -14,16 +15,7 @@ module.exports = (function(){
 			});
 		},
 		create: function(req, res){
-			var newAnswer = new Answer({name: req.body.name, topic: req.body.topic, answer: req.body.answer});
-			newAnswer.save(function(err, results){
-				if(err){
-					console.log('GET THE DEFIBRILLATOR', results);
-				}
-				else {
-					console.log('SAVED THEM');
-					res.json(results);
-				}
-			});
-		},
+			console.log('create answer function', req.body);
+		}
 	}
 })();

@@ -7,7 +7,7 @@
 	<h3>{{current_user}}, post your answer here!</h3>
 	<form role="form" name="createform">
 		<input type="hidden" ng-value="newAnswer.name=current_user">
-		<input type="hidden" ng-value="newAnswer.topic=topic._id">
+		<input type="hidden" ng-value="newAnswer._topic=topic._id">
 		<div class="form-group">
 			<input type="textarea" class="form-control" id="answer" name="answer" ng-model="newAnswer.answer">
 		</div>
