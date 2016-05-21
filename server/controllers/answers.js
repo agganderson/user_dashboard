@@ -15,7 +15,10 @@ module.exports = (function(){
 			});
 		},
 		create: function(req, res){
-			console.log('create answer function', req.body);
+			// console.log('create answer function', req.body);
+			Topic.findOne({_id: req.params.id}, function(err, results){
+				
+			})
 		}
 	}
 })();
